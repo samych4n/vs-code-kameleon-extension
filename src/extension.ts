@@ -13,23 +13,26 @@ const createFiles = (folder?: string) => {
 
   createStyled(folder)
   createType(folder)
+  createVisual(folder)
   createComponent(folder)
   createIndex(folder)
   return vscode.window.showInformationMessage('Done')
 }
 
 const createStyled = (folder: string) => {
-  const styledPath = path.join(folder, 'styled.tsx')
+  const styledPath = path.join(folder, 'styled.ts')
   if (fs.existsSync(styledPath)) return
 
-  const styledContent = `import { Theme } from 'newCheckout/types'
-import styled from '@emotion/styled'
+  const styledContent = `import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+
+import { Theme } from 'newCheckout/types/Theme'
 
 const wrapperStyles = ({ theme }:Theme) => css\`
 
 \`
 export const Wrapper = styled('div')(wrapperStyles)
+
 `
 
   fs.writeFileSync(styledPath, styledContent)
@@ -44,8 +47,26 @@ const createType = (folder: string) => {
   const typeContent = `export type ${folderName}Type = {
 
 }
+
+export type ${folderName}VisualType = {
+
+}
 `
   fs.writeFileSync(typePath, typeContent)
+}
+
+const createVisual = (folder: string) => {
+  const typePath = path.join(folder, 'Visual.tsx')
+  if (fs.existsSync(typePath)) return
+
+  const folderName = path.basename(folder)
+
+  const visualContent = `import * as S from './styled'
+  import { ${folderName}VisualType } from './type'
+
+  const PriceInfo = ({}:${folderName}VisualType) => <S.Wrapper> ${folderName}Visual </S.Wrapper>
+`
+  fs.writeFileSync(typePath, visualContent)
 }
 
 const createComponent = (folder: string) => {
@@ -54,13 +75,11 @@ const createComponent = (folder: string) => {
 	if (fs.existsSync(componentPath)) return
 
 	const componentContent = `import { ${folderName}Type } from './type'
-import * as S from './styled'
+  import Visual from './Visual'
 
 const ${folderName} = ({}: ${folderName}Type) => {
 	return (
-		<div>
-			${folderName}
-		</div>
+		<Visual />
   )
 }
 
@@ -75,8 +94,9 @@ const createIndex = (folder: string) => {
 
   const folderName = path.basename(folder)
 
-  const indexContent = `export { default as ${folderName} } from './${folderName}'
-export type { ${folderName}Type } from './type'
+  const indexContent = `export * as ${folderName}Types from './type.d'
+export { default as ${folderName} } from './${folderName}'
+export { default as ${folderName}Visual } from './Visual'
 `
   fs.writeFileSync(indexPath, indexContent)
 }

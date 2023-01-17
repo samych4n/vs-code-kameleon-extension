@@ -2,7 +2,7 @@
   "name": "vs-code-kameleon-extension",
   "displayName": "Kameleon",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.65.0"
   },
@@ -11,6 +11,7 @@
     "email": "sdcosta@leroymerlin.com.br",
     "url": "https://github.com/samych4n"
   },
+  "publisher": "Samuel-Costa",
   "keywords": ["kameleon", "leroy merlin"],
   "categories": ["Other"],
   "activationEvents": ["onCommand:kameleon.newComponent"],
