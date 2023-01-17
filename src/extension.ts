@@ -28,11 +28,8 @@ import { css } from '@emotion/react'
 
 import { Theme } from 'newCheckout/types/Theme'
 
-const wrapperStyles = ({ theme }:Theme) => css\`
-
-\`
+const wrapperStyles = ({ theme }:Theme) => css\`\`
 export const Wrapper = styled('div')(wrapperStyles)
-
 `
 
   fs.writeFileSync(styledPath, styledContent)
@@ -44,13 +41,9 @@ const createType = (folder: string) => {
 
   const folderName = path.basename(folder)
 
-  const typeContent = `export type ${folderName}Type = {
+  const typeContent = `export type ${folderName}Type = {}
 
-}
-
-export type ${folderName}VisualType = {
-
-}
+export type ${folderName}VisualType = {}
 `
   fs.writeFileSync(typePath, typeContent)
 }
@@ -62,9 +55,13 @@ const createVisual = (folder: string) => {
   const folderName = path.basename(folder)
 
   const visualContent = `import * as S from './styled'
-  import { ${folderName}VisualType } from './type'
+import { ${folderName}VisualType } from './type'
 
-  const PriceInfo = ({}:${folderName}VisualType) => <S.Wrapper> ${folderName}Visual </S.Wrapper>
+const ${folderName} = ({  }: ${folderName}VisualType) => (
+  <S.Wrapper> SuccessVisual </S.Wrapper>
+)
+
+export default ${folderName}
 `
   fs.writeFileSync(typePath, visualContent)
 }
@@ -75,12 +72,10 @@ const createComponent = (folder: string) => {
 	if (fs.existsSync(componentPath)) return
 
 	const componentContent = `import { ${folderName}Type } from './type'
-  import Visual from './Visual'
+import Visual from './Visual'
 
-const ${folderName} = ({}: ${folderName}Type) => {
-	return (
-		<Visual />
-  )
+const ${folderName} = ({  }: ${folderName}Type) => {
+  return <Visual />
 }
 
 export default ${folderName}
